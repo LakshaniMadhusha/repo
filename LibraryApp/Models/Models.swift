@@ -55,15 +55,19 @@ final class Book: Identifiable {
     var genre: String
     var status: BookStatus
     var rating: Double
+    var coverUrl: String?
+    var pdfUrl: String?
     var createdAt: Date
 
-    init(id: UUID = UUID(), title: String, author: String, genre: String, status: BookStatus = .available, rating: Double = 0, createdAt: Date = .now) {
+    init(id: UUID = UUID(), title: String, author: String, genre: String, status: BookStatus = .available, rating: Double = 0, coverUrl: String? = nil, pdfUrl: String? = nil, createdAt: Date = .now) {
         self.id = id
         self.title = title
         self.author = author
         self.genre = genre
         self.status = status
         self.rating = rating
+        self.coverUrl = coverUrl
+        self.pdfUrl = pdfUrl
         self.createdAt = createdAt
     }
 }

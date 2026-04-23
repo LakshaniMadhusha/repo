@@ -11,7 +11,6 @@
 		EAE3F6582C3654D5FA4A4971 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 67F707E4411A7481B5EA2ADD /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
-
 /* Begin PBXFileReference section */
 		7FAFAE352F963EB8002CD2F0 /* LibraryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibraryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -345,7 +344,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 
 /* Begin XCRemoteSwiftPackageReference section */
 		9791B8EE3C2DA8A5C36FE9EF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
