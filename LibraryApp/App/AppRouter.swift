@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct AppRouter: View {
-    @Environment(AuthService.self) private var auth
+    @EnvironmentObject var auth: AuthService
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     
@@ -14,6 +14,8 @@ struct AppRouter: View {
                 SplashView()
                     .task {
                         auth.bootstrap(modelContext: modelContext)
+                        // Request notification permission
+                        _ = await NotificationService.shared.requestPermission()
                         // Give the splash screen animation time to play out
                         try? await Task.sleep(for: .seconds(2.5))
                         withAnimation(.easeInOut(duration: 0.5)) {

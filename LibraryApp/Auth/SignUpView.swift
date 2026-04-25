@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct SignUpView: View {
-    @Environment(AuthService.self) private var auth
+    @EnvironmentObject var auth: AuthService
     @Environment(\.modelContext) private var modelContext
 
     @State private var vm = SignUpViewModel()

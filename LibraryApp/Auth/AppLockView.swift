@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AppLockView: View {
-    @Environment(AuthService.self) private var auth
+    @EnvironmentObject var auth: AuthService
 
     var body: some View {
         VStack(spacing: 14) {

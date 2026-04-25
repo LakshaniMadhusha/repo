@@ -265,6 +265,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan books for reading information.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is required for Siri Voice commands.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Voice recognition is required for custom search.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -298,6 +299,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need camera access to scan books for reading information.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone access is required for Siri Voice commands.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Voice recognition is required for custom search.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

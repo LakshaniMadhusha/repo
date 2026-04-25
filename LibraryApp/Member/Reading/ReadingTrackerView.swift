@@ -11,7 +11,8 @@ struct ReadingTrackerView: View {
     @State private var selectedBook: Book?
     @State private var timeElapsed: TimeInterval = 0
     @State private var isRunning = false
-    @State private var timer: Timer?
+    @State private var timerTask: Task<Void, Never>?
+    @State private var lastTickDate = Date()
     @State private var showSuccess = false
     @State private var targetMinutes: Double = 15
     @State private var isManualMode = false
@@ -226,21 +227,33 @@ struct ReadingTrackerView: View {
                 }
             }
         }
+        .onDisappear {
+            pauseTimer()
+        }
     }
     
     private func startTimer() {
         isRunning = true
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            withAnimation(.linear(duration: 1.0)) {
-                timeElapsed += 1
+        lastTickDate = Date()
+        timerTask?.cancel()
+        timerTask = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if Task.isCancelled { break }
+                let now = Date()
+                let elapsedSinceTick = now.timeIntervalSince(lastTickDate)
+                lastTickDate = now
+                withAnimation(.linear(duration: 1.0)) {
+                    timeElapsed += elapsedSinceTick
+                }
             }
         }
     }
     
     private func pauseTimer() {
         isRunning = false
-        timer?.invalidate()
-        timer = nil
+        timerTask?.cancel()
+        timerTask = nil
     }
     
     private func saveSession() {
@@ -251,6 +264,9 @@ struct ReadingTrackerView: View {
         session.book = selectedBook
         modelContext.insert(session)
         try? modelContext.save()
+        
+        // Schedule challenge milestone notification
+        NotificationService.shared.scheduleChallengeMilestone(userId: user.id, milestone: "Read for \(minutes) minutes!")
         
         triggerSuccess()
     }

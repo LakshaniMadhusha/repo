@@ -45,6 +45,10 @@ struct HallDetailView: View {
         selectedSeat.status = .reserved
         selectedSeat.reservedUntil = Calendar.current.date(byAdding: .hour, value: 2, to: .now)
         try? modelContext.save()
+
+        // Schedule seat confirmation notification
+        let reservation = Reservation(createdAt: .now, status: .approved)
+        NotificationService.shared.scheduleSeatConfirmation(for: reservation)
     }
 }
 

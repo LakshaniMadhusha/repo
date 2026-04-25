@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @Environment(AuthService.self) private var auth
+    @EnvironmentObject var auth: AuthService
     @Environment(\.modelContext) private var modelContext
     let user: AppUser
     @State private var biometricToggle: Bool = false

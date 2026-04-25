@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import UserNotifications
 
 @Observable
 @MainActor
@@ -42,6 +43,11 @@ final class HomeViewModel {
                 $0.returnedAt == nil && $0.user?.id == userId
             }
 
+            // Schedule due date reminders for active loans
+            for loan in activeLoans {
+                NotificationService.shared.scheduleDueDateReminder(for: loan)
+            }
+
             // ✅ Approved reservations — same pattern
             // ReservationStatus is a Codable enum stored as String rawValue
             // SwiftData can predicate on rawValue strings but NOT on
@@ -51,9 +57,16 @@ final class HomeViewModel {
                 $0.status == .approved && $0.user?.id == userId
             }
 
+            // Schedule pickup alerts for approved reservations
+            for reservation in activeReservations {
+                NotificationService.shared.schedulePickupAlert(for: reservation)
+            }
+
             // ✅ Reading sessions — userId is a flat UUID, safe to predicate
             let sessionDescriptor = FetchDescriptor<ReadingSession>(
-                predicate: #Predicate { $0.userId == userId },
+                predicate: #Predicate<ReadingSession> { session in
+                    session.userId == userId
+                },
                 sortBy: [SortDescriptor(\.startedAt, order: .reverse)]
             )
             let userSessions = try modelContext.fetch(sessionDescriptor)

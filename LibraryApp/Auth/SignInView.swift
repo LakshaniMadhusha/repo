@@ -3,7 +3,7 @@ import SwiftData
 import LocalAuthentication
 
 struct SignInView: View {
-    @Environment(AuthService.self) private var auth
+    @EnvironmentObject var auth: AuthService
     @Environment(\.modelContext) private var modelContext
 
     @State private var vm = SignInViewModel()

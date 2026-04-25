@@ -9,12 +9,11 @@ enum AuthState {
     case signedIn(AppUser)
 }
 
-@Observable
-final class AuthService {
-    var state: AuthState = .signedOut
-    var isLoading: Bool = false
-    var errorMessage: String? = nil
-    var isAppLocked: Bool = false
+final class AuthService: ObservableObject {
+    @Published var state: AuthState = .signedOut
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String? = nil
+    @Published var isAppLocked: Bool = false
     var lastBackgroundAt: Date? = nil
     let autoLockTimeoutSeconds: TimeInterval = 60
     

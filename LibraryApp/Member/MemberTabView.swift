@@ -11,7 +11,7 @@ struct MemberTabView: View {
             DiscoverView()
                 .tabItem { Label("Discover", systemImage: "magnifyingglass") }
 
-            LibraryView()
+            LibraryView(user: user)
                 .tabItem { Label("Library", systemImage: "books.vertical.fill") }
 
             RewardsView()

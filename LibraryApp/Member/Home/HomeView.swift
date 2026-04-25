@@ -129,10 +129,15 @@ struct HomeView: View {
 
                     // 4. Quick Actions
                     HStack(spacing: 0) {
-                        QuickActionView(title: "Scan", icon: "barcode.viewfinder")
-                        QuickActionView(title: "Browse", icon: "magnifyingglass")
-                        QuickActionView(title: "Halls", icon: "building.2.fill")
-                        QuickActionView(title: "Seats", icon: "person.wave.2.fill")
+                        NavigationLink(destination: LoansView(userId: user.id)) {
+                            QuickActionView(title: "My Loans", icon: "book.fill")
+                        }
+                        NavigationLink(destination: ReadingProgressView(user: user)) {
+                            QuickActionView(title: "Progress", icon: "chart.bar.fill")
+                        }
+                        NavigationLink(destination: ReadingTrackerView(user: user, activeLoans: vm.activeLoans)) {
+                            QuickActionView(title: "Track Reading", icon: "timer")
+                        }
                     }
                     .padding(.horizontal, 10)
 

@@ -5,9 +5,14 @@ struct ReadingHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @Query private var sessions: [ReadingSession]
     
+    let userId: UUID
+    
     init(userId: UUID) {
+        self.userId = userId
         self._sessions = Query(
-            filter: #Predicate<ReadingSession> { $0.userId == userId },
+            filter: #Predicate<ReadingSession> { session in
+                session.userId == userId
+            },
             sort: [SortDescriptor(\.startedAt, order: .reverse)]
         )
     }

@@ -4,7 +4,6 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
 
-@main
 struct LibraryCompanionApp: App {
     let container: ModelContainer = {
         let schema = Schema([
@@ -52,7 +51,7 @@ struct LibraryCompanionApp: App {
     var body: some Scene {
         WindowGroup {
             AppRouter()
-                .environment(authService)
+                .environmentObject(authService)
                 .task {
                     // Activate Global Dual Offline-Cloud Synchronization Daemon
                     FirebaseSyncService.shared.startSyncing(context: container.mainContext)

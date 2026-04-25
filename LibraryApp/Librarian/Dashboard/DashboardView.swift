@@ -5,6 +5,9 @@ import Charts
 struct DashboardView: View {
     @Query private var books: [Book]
     @Query private var loans: [Loan]
+    @State private var showingAnnouncement = false
+    @State private var announcementTitle = ""
+    @State private var announcementMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -15,11 +18,35 @@ struct DashboardView: View {
 
                     CirculationChartView(loans: loans)
                         .lightCard()
+
+                    Button("Send Announcement") {
+                        showingAnnouncement = true
+                    }
+                    .buttonStyle(.primaryButton)
+                    .padding(.horizontal, 20)
                 }
                 .padding(20)
             }
             .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Dashboard")
+            .sheet(isPresented: $showingAnnouncement) {
+                VStack(spacing: 20) {
+                    Text("Send Librarian Announcement")
+                        .font(.headline)
+                    TextField("Title", text: $announcementTitle)
+                        .textFieldStyle(.roundedBorder)
+                    TextField("Message", text: $announcementMessage)
+                        .textFieldStyle(.roundedBorder)
+                    Button("Send") {
+                        NotificationService.shared.scheduleLibrarianAnnouncement(title: announcementTitle, message: announcementMessage)
+                        showingAnnouncement = false
+                        announcementTitle = ""
+                        announcementMessage = ""
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .padding()
+            }
         }
     }
 }
