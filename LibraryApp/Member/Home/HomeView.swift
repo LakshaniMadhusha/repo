@@ -13,6 +13,7 @@ struct HomeView: View {
 
     var body: some View {
         let todayMins = sessions.filter { Calendar.current.isDateInToday($0.startedAt) }.reduce(0) { $0 + $1.minutes }
+        let totalPoints = sessions.reduce(0) { $0 + ($1.minutes / 10) + $1.challengeBonus }
         let goalProgress = min(1.0, 0.1 + (Double(todayMins) / 120.0) * 0.9)
         NavigationStack {
             ScrollView(showsIndicators: false) {
@@ -114,7 +115,7 @@ struct HomeView: View {
                                     .clipShape(Circle())
                             }
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("\(max(vm.rewardPoints, 1850))")
+                                Text("\(totalPoints)")
                                     .font(.title2.weight(.bold))
                                 Text("Top 15% of readers")
                                     .font(.caption)
@@ -158,11 +159,11 @@ struct HomeView: View {
 
                     // 6. Carousels
                     if !vm.activeLoans.isEmpty {
-                        SectionCarouselView(title: "Current Reading", books: vm.activeLoans.compactMap { $0.book })
+                        SectionCarouselView(title: "Current Reading", books: vm.activeLoans.compactMap { $0.book }, user: user)
                     }
                     if !vm.featuredBooks.isEmpty {
-                        SectionCarouselView(title: "Top Picks", books: vm.featuredBooks)
-                        SectionCarouselView(title: "Siri Suggestions", books: vm.featuredBooks.reversed())
+                        SectionCarouselView(title: "Top Picks", books: vm.featuredBooks, user: user)
+                        SectionCarouselView(title: "Siri Suggestions", books: vm.featuredBooks.reversed(), user: user)
                     }
 
                     // 7. Reading Goals
@@ -329,6 +330,7 @@ struct UpcomingCardView: View {
 struct SectionCarouselView: View {
     let title: String
     let books: [Book]
+    let user: AppUser?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -350,7 +352,7 @@ struct SectionCarouselView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(books) { book in
-                        NavigationLink(destination: BookDetailView(book: book)) {
+                        NavigationLink(destination: BookDetailView(book: book, user: user)) {
                             BookCoverCard(book: book, width: 110, height: 165)
                         }
                     }

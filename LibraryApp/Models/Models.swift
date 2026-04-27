@@ -53,22 +53,93 @@ final class Book: Identifiable {
     var title: String
     var author: String
     var genre: String
+    var summary: String
     var status: BookStatus
     var rating: Double
     var coverUrl: String?
     var pdfUrl: String?
+    var shelfCode: String
+    var branch: String
+    var totalCopies: Int
     var createdAt: Date
 
-    init(id: UUID = UUID(), title: String, author: String, genre: String, status: BookStatus = .available, rating: Double = 0, coverUrl: String? = nil, pdfUrl: String? = nil, createdAt: Date = .now) {
+    // Relationships
+    @Relationship(deleteRule: .cascade) var loans: [Loan] = []
+    @Relationship(deleteRule: .cascade) var reservations: [Reservation] = []
+
+    init(id: UUID = UUID(), title: String, author: String, genre: String, summary: String = "", status: BookStatus = .available, rating: Double = 0, coverUrl: String? = nil, pdfUrl: String? = nil, shelfCode: String = "", branch: String = "Main Branch", totalCopies: Int = 1, createdAt: Date = .now) {
         self.id = id
         self.title = title
         self.author = author
         self.genre = genre
+        self.summary = summary
         self.status = status
         self.rating = rating
         self.coverUrl = coverUrl
         self.pdfUrl = pdfUrl
+        self.shelfCode = shelfCode
+        self.branch = branch
+        self.totalCopies = totalCopies
         self.createdAt = createdAt
+    }
+
+    // Computed properties for availability intelligence
+    var availableCopies: Int {
+        let activeLoans = loans.filter { $0.isActive }
+        return max(0, totalCopies - activeLoans.count)
+    }
+
+    var waitingQueueCount: Int {
+        reservations.filter { $0.status == .pending || $0.status == .approved }.count
+    }
+
+    var isAvailable: Bool {
+        availableCopies > 0
+    }
+
+    var estimatedWaitTime: String {
+        if waitingQueueCount == 0 {
+            return "Available now"
+        } else if waitingQueueCount == 1 {
+            return "1 person waiting"
+        } else {
+            return "\(waitingQueueCount) people waiting"
+        }
+    }
+
+    // Related books (computed based on same genre)
+    func getRelatedBooks(from allBooks: [Book]) -> [Book] {
+        allBooks.filter { $0.id != self.id && $0.genre == self.genre }.prefix(5).map { $0 }
+    }
+
+    // Reading challenge relevance
+    func getChallengeRelevance() -> [String] {
+        var relevance: [String] = []
+
+        // Genre-based challenges
+        switch genre.lowercased() {
+        case "fiction":
+            relevance.append("Fiction Master Challenge")
+        case "non-fiction", "biography":
+            relevance.append("Knowledge Seeker Challenge")
+        case "science fiction":
+            relevance.append("Sci-Fi Explorer Challenge")
+        case "mystery", "thriller":
+            relevance.append("Mystery Solver Challenge")
+        case "romance":
+            relevance.append("Romance Reader Challenge")
+        default:
+            relevance.append("Diverse Reader Challenge")
+        }
+
+        // Rating-based challenges
+        if rating >= 4.5 {
+            relevance.append("Bestseller Challenge")
+        }
+
+        // Length-based (if we had page count, we could add more)
+
+        return relevance
     }
 }
 
@@ -104,15 +175,20 @@ enum ReservationStatus: String, Codable, CaseIterable {
 final class Reservation: Identifiable {
     @Attribute(.unique) var id: UUID
     var createdAt: Date
-    var status: ReservationStatus
+    var statusRaw: String
 
     var user: AppUser?
     var book: Book?
 
+    var status: ReservationStatus {
+        get { ReservationStatus(rawValue: statusRaw) ?? .pending }
+        set { statusRaw = newValue.rawValue }
+    }
+
     init(id: UUID = UUID(), createdAt: Date = .now, status: ReservationStatus = .pending) {
         self.id = id
         self.createdAt = createdAt
-        self.status = status
+        self.statusRaw = status.rawValue
     }
 }
 
@@ -163,15 +239,19 @@ final class ReadingSession: Identifiable {
     var startedAt: Date
     var minutes: Int
     var userId: UUID
+    var challengeName: String?
+    var challengeBonus: Int
 
     var user: AppUser?
     var book: Book?
 
-    init(id: UUID = UUID(), startedAt: Date = .now, minutes: Int, userId: UUID) {
+    init(id: UUID = UUID(), startedAt: Date = .now, minutes: Int = 0, userId: UUID, challengeName: String? = nil, challengeBonus: Int = 0) {
         self.id = id
         self.startedAt = startedAt
         self.minutes = minutes
         self.userId = userId
+        self.challengeName = challengeName
+        self.challengeBonus = challengeBonus
     }
 }
 

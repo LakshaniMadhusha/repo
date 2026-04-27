@@ -11,10 +11,50 @@ enum MockData {
         let librarian = AppUser(name: "Mike Johnson", email: "mike@library.com", role: .librarian)
 
         let books: [Book] = [
-            Book(title: "Tick Tack", author: "James R.", genre: "Thriller", status: .onLoan, rating: 4.5),
-            Book(title: "The Big Empty", author: "Sarah M.", genre: "Fiction", status: .available, rating: 4.2),
-            Book(title: "Robert Craig", author: "R. Craig", genre: "Mystery", status: .available, rating: 4.7),
-            Book(title: "Don't Blink", author: "K. Patterson", genre: "Thriller", status: .reserved, rating: 4.3),
+            Book(
+                title: "Tick Tack",
+                author: "James R.",
+                genre: "Thriller",
+                summary: "A heart-pounding thriller that keeps you on the edge of your seat with every twist and turn. When Detective Sarah Miller discovers a series of seemingly unrelated murders, she uncovers a conspiracy that goes deeper than she ever imagined.",
+                status: .onLoan,
+                rating: 4.5,
+                shelfCode: "THR-001",
+                branch: "Main Branch",
+                totalCopies: 3
+            ),
+            Book(
+                title: "The Big Empty",
+                author: "Sarah M.",
+                genre: "Fiction",
+                summary: "An introspective novel about finding meaning in the vast emptiness of modern life. Follow the journey of a young artist as she navigates love, loss, and self-discovery in the sprawling landscapes of the American West.",
+                status: .available,
+                rating: 4.2,
+                shelfCode: "FIC-045",
+                branch: "Main Branch",
+                totalCopies: 5
+            ),
+            Book(
+                title: "Robert Craig",
+                author: "R. Craig",
+                genre: "Mystery",
+                summary: "A classic whodunit mystery set in the foggy streets of Victorian London. When a wealthy businessman is found murdered in his study, Inspector Hawthorne must unravel a web of deceit, betrayal, and hidden family secrets.",
+                status: .available,
+                rating: 4.7,
+                shelfCode: "MYS-012",
+                branch: "Downtown Branch",
+                totalCopies: 2
+            ),
+            Book(
+                title: "Don't Blink",
+                author: "K. Patterson",
+                genre: "Thriller",
+                summary: "In this gripping psychological thriller, a successful lawyer's perfect life begins to unravel when she starts receiving anonymous threats. As the stakes escalate, she must confront her past and fight for survival.",
+                status: .reserved,
+                rating: 4.3,
+                shelfCode: "THR-023",
+                branch: "Main Branch",
+                totalCopies: 4
+            ),
         ]
 
         let hall = Hall(name: "Reading Room A", floor: 1, seats: generateSeats(rows: 5, cols: 8))
@@ -40,6 +80,17 @@ enum MockData {
         loan.user = member
         loan.book = books.first
         modelContext.insert(loan)
+
+        // Seed some reservations for waiting queue demo
+        let reservation1 = Reservation(status: .pending)
+        reservation1.user = member
+        reservation1.book = books[3] // Don't Blink
+        modelContext.insert(reservation1)
+
+        let reservation2 = Reservation(status: .approved)
+        reservation2.user = librarian
+        reservation2.book = books[3] // Don't Blink
+        modelContext.insert(reservation2)
 
         try modelContext.save()
     }

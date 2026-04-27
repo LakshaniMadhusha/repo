@@ -72,7 +72,7 @@ final class HomeViewModel {
             let userSessions = try modelContext.fetch(sessionDescriptor)
 
             readingStreak = calculateStreak(from: userSessions)
-            rewardPoints = userSessions.reduce(0) { $0 + $1.minutes / 10 }
+            rewardPoints = userSessions.reduce(0) { $0 + ($1.minutes / 10) + $1.challengeBonus }
 
         } catch {
             errorMessage = "Failed to load home data."

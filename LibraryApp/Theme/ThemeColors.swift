@@ -5,19 +5,38 @@ extension Color {
     static let pageBg = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark ? UIColor(Color(hex: "1E1E1E")) : UIColor(Color(hex: "F7F5FF"))
     })
-    
+
     static let cardBg = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark ? UIColor(Color(hex: "29292A")) : UIColor(Color(hex: "FFFFFF"))
     })
-    
+
     static let surfaceBg = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark ? UIColor(Color(hex: "343436")) : UIColor(Color(hex: "EEF0FB"))
     })
-    
+
     static let accent = Color(UIColor { traitCollection in
         traitCollection.userInterfaceStyle == .dark ? UIColor(Color(hex: "8166FF")) : UIColor(Color(hex: "6C63FF"))
     }) // Replaces custom `.primary` to avoid Apple's `.primary` text color conflicts
-    
+
+    // ── Library Feature: Light Purple Theme ──────────────────────────────
+    /// Soft light-purple used for the Library section background.
+    static let lightPurpleBg = Color(UIColor { tc in
+        tc.userInterfaceStyle == .dark
+            ? UIColor(Color(hex: "231B3A"))
+            : UIColor(Color(hex: "EDE8FF"))
+    })
+
+    /// Card surface inside the Library (slightly lighter/darker than bg).
+    static let lightPurpleCard = Color(UIColor { tc in
+        tc.userInterfaceStyle == .dark
+            ? UIColor(Color(hex: "2E2450"))
+            : UIColor(Color(hex: "F8F5FF"))
+    })
+
+    /// Vivid purple accent pulled from the theme — use for highlights/pills.
+    static let purpleAccent = Color(hex: "7C5CFF")
+    // ─────────────────────────────────────────────────────────────────────
+
     // Explicit Dark mappings for compatibility with older code while refactoring
     static let darkPrimary       = Color(hex: "8166FF")
     static let darkSurfaceBg     = Color(hex: "343436")

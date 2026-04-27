@@ -8,7 +8,7 @@ struct MemberTabView: View {
             HomeView(user: user)
                 .tabItem { Label("Home", systemImage: "house.fill") }
 
-            DiscoverView()
+            DiscoverView(user: user)
                 .tabItem { Label("Discover", systemImage: "magnifyingglass") }
 
             LibraryView(user: user)

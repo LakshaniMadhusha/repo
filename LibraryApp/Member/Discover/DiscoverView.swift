@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DiscoverView: View {
+    let user: AppUser?
     @Query(sort: \Book.createdAt, order: .reverse) private var books: [Book]
     @State private var vm = DiscoverViewModel()
     @StateObject private var speechRecognizer = SpeechRecognizer()
@@ -40,27 +41,32 @@ struct DiscoverView: View {
                             title: "Coming Soon", 
                             subtitle: "Most anticipated new releases", 
                             books: Array(books.prefix(8)),
-                            isFeatured: true
+                            isFeatured: true,
+                            user: user
                         )
                         
                         GenreCarousel(
                             title: "Fiction", 
-                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("fiction") }
+                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("fiction") },
+                            user: user
                         )
 
                         GenreCarousel(
                             title: "Novels", 
-                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("novel") }
+                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("novel") },
+                            user: user
                         )
 
                         GenreCarousel(
                             title: "Literature", 
-                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("literature") }
+                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("literature") },
+                            user: user
                         )
 
                         GenreCarousel(
                             title: "Comics", 
-                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("comic") }
+                            books: books.filter { $0.genre.localizedCaseInsensitiveContains("comic") },
+                            user: user
                         )
 
                         GenreCarousel(
@@ -70,7 +76,8 @@ struct DiscoverView: View {
                                 !$0.genre.localizedCaseInsensitiveContains("novel") && 
                                 !$0.genre.localizedCaseInsensitiveContains("literature") && 
                                 !$0.genre.localizedCaseInsensitiveContains("comic") 
-                            }
+                            },
+                            user: user
                         )
                     }
                     .padding(.vertical, 24)
@@ -108,6 +115,7 @@ struct GenreCarousel: View {
     var subtitle: String? = nil
     let books: [Book]
     var isFeatured: Bool = false
+    let user: AppUser?
     
     var body: some View {
         if !books.isEmpty {
@@ -140,7 +148,7 @@ struct GenreCarousel: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(books) { book in
-                            NavigationLink(destination: BookDetailView(book: book)) {
+                            NavigationLink(destination: BookDetailView(book: book, user: user)) {
                                 if isFeatured {
                                     FeaturedBookCard(book: book)
                                 } else {
