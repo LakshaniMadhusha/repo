@@ -12,7 +12,7 @@ struct BookDetailView: View {
     
     var body: some View {
         ZStack {
-            Color.lightPurpleBg.ignoresSafeArea()
+            Color.pageBg.ignoresSafeArea()
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -30,7 +30,7 @@ struct BookDetailView: View {
                             
                             Text(book.author)
                                 .font(.system(size: 16, weight: .medium, design: .rounded))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.textSecondary)
                         }
                         .padding(.top, 20)
                         
@@ -89,7 +89,7 @@ struct BookDetailView: View {
         ZStack {
             // Ambient Background Wash
             LinearGradient(
-                colors: [Color.purple.opacity(0.15), Color.lightPurpleBg],
+                colors: [Color.purple.opacity(0.15), Color.pageBg],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -117,7 +117,7 @@ struct BookDetailView: View {
                             .padding(.horizontal)
                     }
                     .frame(width: 180, height: 260)
-                    .background(Color.lightPurpleCard)
+                    .background(Color.cardBg)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
@@ -189,14 +189,14 @@ struct BookDetailView: View {
                         .foregroundColor(.green)
                     Text("\(book.availableCopies) copies")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.textSecondary)
                 } else {
                     Text("Waitlist")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.textSecondary)
                     Text("\(book.totalCopies) copies")
                         .font(.caption2)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -219,7 +219,7 @@ struct BookDetailView: View {
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -285,7 +285,7 @@ struct BookDetailView: View {
                     .foregroundColor(.white)
                 Text("Floor 2 Shelf \(book.shelfCode)")
                     .font(.system(size: 13))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
             }
             
             Spacer()
@@ -297,7 +297,7 @@ struct BookDetailView: View {
             }
         }
         .padding(16)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .cornerRadius(16)
     }
     
@@ -324,7 +324,7 @@ struct BookDetailView: View {
             Spacer()
         }
         .padding(16)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .cornerRadius(16)
     }
     
@@ -355,7 +355,7 @@ struct BookDetailView: View {
                 detailRow(label: "Pages", value: "304")
             }
             .padding(16)
-            .background(Color.lightPurpleCard)
+            .background(Color.cardBg)
             .cornerRadius(16)
         }
         .padding(.top, 12)
@@ -365,7 +365,7 @@ struct BookDetailView: View {
         HStack {
             Text(label)
                 .font(.system(size: 14))
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
             Spacer()
             Text(value)
                 .font(.system(size: 14, weight: .medium))
@@ -398,6 +398,7 @@ struct BookDetailView: View {
         
         try? modelContext.save()
         
+        NotificationService.shared.scheduleBookReservationConfirmation(for: book.title, userId: user.id, modelContext: modelContext)
         showFeedback(message: "Reserved Successfully!")
     }
     
@@ -463,7 +464,7 @@ private struct ChallengeSessionView: View {
 
             Text("Complete this challenge to earn bonus points and get a boost toward your reading goals.")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
 
@@ -485,8 +486,8 @@ private struct ChallengeSessionView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .foregroundColor(.primary)
+                    .background(Color.cardBg)
+                    .foregroundColor(.textPrimary)
                     .cornerRadius(16)
             }
         }

@@ -24,9 +24,12 @@ struct LibraryApp: App {
             Loan.self,
             Reservation.self,
             Hall.self,
+            HallEvent.self,
             Seat.self,
+            HallReservation.self,
             ReadingSession.self,
             Badge.self,
+            AppNotification.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
@@ -44,9 +47,12 @@ struct LibraryApp: App {
                     Loan.self,
                     Reservation.self,
                     Hall.self,
+                    HallEvent.self,
                     Seat.self,
+                    HallReservation.self,
                     ReadingSession.self,
                     Badge.self,
+                    AppNotification.self,
                 ]))
             } catch {
                 fatalError("SwiftData container init failed even after deleting store: \(error)")

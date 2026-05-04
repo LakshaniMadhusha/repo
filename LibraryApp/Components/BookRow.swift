@@ -10,7 +10,7 @@ struct BookRow: View {
                 .frame(width: 44, height: 58)
                 .overlay(
                     Image(systemName: "book.closed.fill")
-                        .foregroundColor(.primary)
+                        .foregroundColor(.textPrimary)
                 )
 
             VStack(alignment: .leading, spacing: 2) {

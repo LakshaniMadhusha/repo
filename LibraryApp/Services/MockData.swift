@@ -57,12 +57,61 @@ enum MockData {
             ),
         ]
 
-        let hall = Hall(name: "Reading Room A", floor: 1, seats: generateSeats(rows: 5, cols: 8))
+        let hallA = Hall(
+            name: "Reading Room A",
+            address: "123 Library Lane",
+            floor: 1,
+            latitude: 37.3317,
+            longitude: -122.0307,
+            seats: generateSeats(rows: 5, cols: 8)
+        )
+
+        let event1 = HallEvent(
+            title: "Author Talk: Modern Poetry",
+            date: Calendar.current.date(byAdding: .day, value: 1, to: .now) ?? .now,
+            eventDescription: "Reserve a seat for an evening with local poets and open mic performances.",
+            hall: hallA
+        )
+        let event2 = HallEvent(
+            title: "Library Film Night",
+            date: Calendar.current.date(byAdding: .day, value: 3, to: .now) ?? .now,
+            eventDescription: "Enjoy a curated documentary screening with refreshments and discussion.",
+            hall: hallA
+        )
+        hallA.events = [event1, event2]
+
+        let hallB = Hall(
+            name: "Study Hall B",
+            address: "48 Book Street",
+            floor: 2,
+            latitude: 37.3328,
+            longitude: -122.0283,
+            seats: generateSeats(rows: 4, cols: 6)
+        )
+
+        let event3 = HallEvent(
+            title: "Exam Prep Q&A",
+            date: Calendar.current.date(byAdding: .day, value: 2, to: .now) ?? .now,
+            eventDescription: "Bring your questions and get advice from study coaches.",
+            hall: hallB
+        )
+        let event4 = HallEvent(
+            title: "Research Skills Session",
+            date: Calendar.current.date(byAdding: .day, value: 5, to: .now) ?? .now,
+            eventDescription: "Learn how to use library archives, databases, and citation tools effectively.",
+            hall: hallB
+        )
+        hallB.events = [event3, event4]
 
         modelContext.insert(member)
         modelContext.insert(librarian)
         books.forEach(modelContext.insert)
-        modelContext.insert(hall)
+        modelContext.insert(hallA)
+        modelContext.insert(hallB)
+        modelContext.insert(event1)
+        modelContext.insert(event2)
+        modelContext.insert(event3)
+        modelContext.insert(event4)
 
         // Seed a few reading sessions for charts
         for daysAgo in 0..<14 {

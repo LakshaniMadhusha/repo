@@ -65,10 +65,10 @@ struct ReadingProgressView: View {
                                     .font(.system(size: 48, weight: .bold, design: .rounded))
                                 Text("min")
                                     .font(.title3)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                                 Text("of \(dailyGoal) min goal")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                             }
                         }
                         .frame(height: 220)
@@ -88,7 +88,7 @@ struct ReadingProgressView: View {
                         }
                     }
                     .padding(20)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color.cardBg)
                     .cornerRadius(16)
                     .padding(.horizontal, 20)
 
@@ -136,7 +136,7 @@ struct ReadingProgressView: View {
                         }
                     }
                     .padding(20)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color.cardBg)
                     .cornerRadius(16)
                     .padding(.horizontal, 20)
 
@@ -148,7 +148,7 @@ struct ReadingProgressView: View {
                         if recentSessions().isEmpty {
                             Text("No recent reading sessions")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.textSecondary)
                                 .padding(.vertical, 20)
                         } else {
                             ForEach(recentSessions().prefix(5)) { session in
@@ -159,7 +159,7 @@ struct ReadingProgressView: View {
                                             .lineLimit(1)
                                         Text(session.startedAt.formatted(date: .abbreviated, time: .shortened))
                                             .font(.subheadline)
-                                            .foregroundColor(.secondary)
+                                            .foregroundColor(.textSecondary)
                                     }
                                     Spacer()
                                     VStack(alignment: .trailing, spacing: 4) {
@@ -172,19 +172,19 @@ struct ReadingProgressView: View {
                                     }
                                 }
                                 .padding(16)
-                                .background(Color(UIColor.tertiarySystemBackground))
+                                .background(Color.surfaceBg)
                                 .cornerRadius(12)
                             }
                         }
                     }
                     .padding(20)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color.cardBg)
                     .cornerRadius(16)
                     .padding(.horizontal, 20)
                 }
                 .padding(.vertical, 20)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Reading Progress")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -322,11 +322,11 @@ struct GoalSetterView: View {
                     HStack {
                         Text("15 min")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                         Spacer()
                         Text("4 hours")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                     }
                 }
                 .padding(.horizontal, 20)
@@ -439,13 +439,13 @@ struct AchievementsView: View {
                         )
                     }
                     .padding(20)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color.cardBg)
                     .cornerRadius(16)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Achievements")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -501,7 +501,7 @@ struct AchievementRow: View {
                     .foregroundColor(isUnlocked ? .primary : .secondary)
                 Text(description)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
                     .lineLimit(2)
             }
 

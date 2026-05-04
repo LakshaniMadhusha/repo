@@ -17,12 +17,12 @@ struct BookManagementView: View {
                         VStack(spacing: 16) {
                             Image(systemName: "books.vertical")
                                 .font(.system(size: 48))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.textSecondary)
                             Text("No books in library.")
                                 .font(.headline)
                             Text("Tap the + icon to add new inventory.")
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.textSecondary)
                         }
                         .padding(.top, 100)
                     } else {
@@ -44,7 +44,7 @@ struct BookManagementView: View {
                 .padding(.vertical, 24)
                 .padding(.bottom, 20)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Catalog")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

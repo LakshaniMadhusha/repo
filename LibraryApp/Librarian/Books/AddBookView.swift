@@ -31,7 +31,7 @@ struct AddBookView: View {
                     // Cover Preview
                     ZStack {
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(UIColor.secondarySystemBackground))
+                            .fill(Color.cardBg)
                             .frame(width: 140, height: 210)
                             .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
                         
@@ -61,7 +61,7 @@ struct AddBookView: View {
                     VStack(spacing: 14) {
                         Text("Quick book entry")
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.textPrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         HStack(spacing: 12) {
@@ -139,7 +139,7 @@ struct AddBookView: View {
                         if let lookupMessage {
                             Text(lookupMessage)
                                 .font(.footnote)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.textSecondary)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal)
                         }
@@ -182,7 +182,7 @@ struct AddBookView: View {
                     .padding(20)
                 }
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Add book")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -245,10 +245,10 @@ fileprivate struct FallbackPreview: View {
         VStack {
             Image(systemName: "photo")
                 .font(.system(size: 40))
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
             Text("No Cover Image")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
                 .padding(.top, 8)
         }
     }

@@ -29,7 +29,7 @@ struct ReadingHistoryView: View {
                             .font(.title3.weight(.bold))
                         Text("Start a reading session from your dashboard to begin tracking your journey.")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
@@ -46,7 +46,7 @@ struct ReadingHistoryView: View {
                             VStack(alignment: .leading, spacing: 12) {
                                 Text(day.formatted(date: .complete, time: .omitted))
                                     .font(.subheadline.weight(.heavy))
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                                     .padding(.horizontal, 20)
                                 
                                 VStack(spacing: 12) {
@@ -63,7 +63,7 @@ struct ReadingHistoryView: View {
                                                     .foregroundColor(.purple)
                                                 Text(session.startedAt.formatted(date: .omitted, time: .shortened))
                                                     .font(.caption)
-                                                    .foregroundColor(.secondary)
+                                                    .foregroundColor(.textSecondary)
                                             }
                                             Spacer()
                                             
@@ -74,11 +74,11 @@ struct ReadingHistoryView: View {
                                                     .foregroundColor(.orange)
                                                 Text("Pts")
                                                     .font(.caption2)
-                                                    .foregroundColor(.secondary)
+                                                    .foregroundColor(.textSecondary)
                                             }
                                         }
                                         .padding(16)
-                                        .background(Color(UIColor.secondarySystemBackground))
+                                        .background(Color.cardBg)
                                         .cornerRadius(16)
                                         .padding(.horizontal, 20)
                                     }
@@ -89,7 +89,7 @@ struct ReadingHistoryView: View {
                     .padding(.vertical, 20)
                 }
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Reading History")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -202,15 +202,50 @@ enum SeatStatus: String, Codable, CaseIterable {
 final class Hall: Identifiable {
     @Attribute(.unique) var id: UUID
     var name: String
+    var address: String
     var floor: Int
+    var latitude: Double
+    var longitude: Double
 
     @Relationship(deleteRule: .cascade) var seats: [Seat]
+    @Relationship(deleteRule: .cascade) var events: [HallEvent]
 
-    init(id: UUID = UUID(), name: String, floor: Int, seats: [Seat] = []) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        address: String,
+        floor: Int,
+        latitude: Double,
+        longitude: Double,
+        seats: [Seat] = [],
+        events: [HallEvent] = []
+    ) {
         self.id = id
         self.name = name
+        self.address = address
         self.floor = floor
+        self.latitude = latitude
+        self.longitude = longitude
         self.seats = seats
+        self.events = events
+    }
+}
+
+@Model
+final class HallEvent: Identifiable {
+    @Attribute(.unique) var id: UUID
+    var title: String
+    var date: Date
+    var eventDescription: String
+
+    @Relationship(deleteRule: .nullify) var hall: Hall?
+
+    init(id: UUID = UUID(), title: String, date: Date, eventDescription: String, hall: Hall? = nil) {
+        self.id = id
+        self.title = title
+        self.date = date
+        self.eventDescription = eventDescription
+        self.hall = hall
     }
 }
 
@@ -230,6 +265,74 @@ final class Seat: Identifiable {
         self.column = column
         self.status = status
         self.reservedUntil = reservedUntil
+    }
+}
+
+enum ReservationType: String, Codable, CaseIterable {
+    case event = "Event"
+    case seat = "Seat"
+}
+
+enum HallReservationStatus: String, Codable, CaseIterable {
+    case pending = "Pending"
+    case confirmed = "Confirmed"
+    case completed = "Completed"
+    case cancelled = "Cancelled"
+}
+
+@Model
+final class HallReservation: Identifiable {
+    @Attribute(.unique) var id: UUID
+    var hallName: String
+    var hallAddress: String
+    var reservationTypeRaw: String
+    var reservationDetails: String
+    var bookingDate: Date
+    var bookingHours: Int
+    var attendeeCount: Int
+    var qrCodeData: String?
+    var statusRaw: String
+    var userId: UUID
+    var createdAt: Date
+
+    var user: AppUser?
+
+    var reservationType: ReservationType {
+        get { ReservationType(rawValue: reservationTypeRaw) ?? .seat }
+        set { reservationTypeRaw = newValue.rawValue }
+    }
+
+    var status: HallReservationStatus {
+        get { HallReservationStatus(rawValue: statusRaw) ?? .pending }
+        set { statusRaw = newValue.rawValue }
+    }
+
+    init(
+        id: UUID = UUID(),
+        hallName: String,
+        hallAddress: String,
+        reservationType: ReservationType,
+        reservationDetails: String,
+        bookingDate: Date,
+        bookingHours: Int = 2,
+        attendeeCount: Int = 1,
+        qrCodeData: String? = nil,
+        status: HallReservationStatus = .confirmed,
+        userId: UUID,
+        createdAt: Date = .now
+    ) {
+        self.id = id
+        self.hallName = hallName
+        self.hallAddress = hallAddress
+        self.reservationTypeRaw = reservationType.rawValue
+        self.reservationDetails = reservationDetails
+        self.bookingDate = bookingDate
+        self.bookingHours = bookingHours
+        self.attendeeCount = attendeeCount
+        self.qrCodeData = qrCodeData
+        self.statusRaw = status.rawValue
+        self.userId = userId
+        self.createdAt = createdAt
     }
 }
 
@@ -270,3 +373,23 @@ final class Badge: Identifiable {
     }
 }
 
+@Model
+final class AppNotification: Identifiable {
+    @Attribute(.unique) var id: UUID
+    var title: String
+    var message: String
+    var category: String
+    var createdAt: Date
+    var userId: UUID?
+    var isRead: Bool
+
+    init(id: UUID = UUID(), title: String, message: String, category: String, createdAt: Date = .now, userId: UUID? = nil, isRead: Bool = false) {
+        self.id = id
+        self.title = title
+        self.message = message
+        self.category = category
+        self.createdAt = createdAt
+        self.userId = userId
+        self.isRead = isRead
+    }
+}

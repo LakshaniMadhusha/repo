@@ -51,7 +51,7 @@ struct RewardsView: View {
                         
                         PremiumPointsChart()
                             .padding(20)
-                            .background(Color(UIColor.secondarySystemBackground))
+                            .background(Color.cardBg)
                             .cornerRadius(24)
                             .shadow(color: Color.black.opacity(0.04), radius: 12, x: 0, y: 4)
                             .padding(.horizontal, 20)
@@ -92,12 +92,12 @@ struct RewardsView: View {
                                     .font(.headline)
                                 Text("Complete reading challenges to earn badges.")
                                     .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                                     .multilineTextAlignment(.center)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(32)
-                            .background(Color(UIColor.secondarySystemBackground))
+                            .background(Color.cardBg)
                             .cornerRadius(24)
                             .padding(.horizontal, 20)
                         } else {
@@ -115,7 +115,7 @@ struct RewardsView: View {
                 .padding(.vertical, 24)
                 .padding(.bottom, 20)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Rewards")
         }
     }
@@ -134,13 +134,13 @@ struct PremiumPointsChart: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("LAST 7 DAYS")
                 .font(.caption2.weight(.bold))
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text("1,240")
                     .font(.title.weight(.bold))
                 Text("Pts Total")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
             }
             
             Chart(points) { p in
@@ -228,12 +228,12 @@ struct SuggestionRow: View {
                 
                 Text(subtitle)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
                     .lineLimit(2)
             }
         }
         .padding(16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.cardBg)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 3)
     }
@@ -267,12 +267,12 @@ struct BadgeCard: View {
                 
                 Text(badge.earnedAt.formatted(date: .abbreviated, time: .omitted))
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
             }
         }
         .frame(width: 110)
         .padding(.vertical, 16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.cardBg)
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 4)
     }

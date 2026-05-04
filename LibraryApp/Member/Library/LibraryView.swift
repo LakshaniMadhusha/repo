@@ -20,7 +20,7 @@ struct LibraryView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 // ── Background wash ────────────────────────────────────────
-                Color.lightPurpleBg
+                Color.pageBg
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
@@ -110,7 +110,7 @@ struct LibraryView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.lightPurpleCard)
+                .fill(Color.cardBg)
                 .shadow(color: Color.purpleAccent.opacity(0.08), radius: 8, x: 0, y: 2)
         )
     }
@@ -158,7 +158,7 @@ struct ReadingTabView: View {
                 .padding(.vertical, 16)
             }
         }
-        .background(Color.lightPurpleBg)
+        .background(Color.pageBg)
         .alert("Return Book", isPresented: $showReturnAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Return", role: .destructive) {
@@ -214,7 +214,7 @@ struct HistoryTabView: View {
                 .padding(.vertical, 16)
             }
         }
-        .background(Color.lightPurpleBg)
+        .background(Color.pageBg)
     }
 }
 
@@ -258,7 +258,7 @@ struct ReservedTabView: View {
                 .padding(.vertical, 16)
             }
         }
-        .background(Color.lightPurpleBg)
+        .background(Color.pageBg)
         .alert("Cancel Reservation", isPresented: $showCancelAlert) {
             Button("Keep", role: .cancel) {}
             Button("Cancel Reservation", role: .destructive) {
@@ -380,7 +380,7 @@ struct ActiveLoanCard: View {
                         .foregroundColor(.textSecondary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 9)
-                        .background(Color.lightPurpleBg)
+                        .background(Color.pageBg)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
@@ -407,7 +407,7 @@ struct ActiveLoanCard: View {
             }
         }
         .padding(16)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 18))
         .shadow(color: Color.purpleAccent.opacity(0.08), radius: 12, x: 0, y: 4)
         .onAppear { animateProgress = true }
@@ -453,7 +453,7 @@ struct HistorySessionCard: View {
             }
         }
         .padding(14)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color.purpleAccent.opacity(0.06), radius: 8, x: 0, y: 3)
     }
@@ -506,7 +506,7 @@ struct ReservationCard: View {
             }
         }
         .padding(14)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: Color.purpleAccent.opacity(0.06), radius: 8, x: 0, y: 3)
     }
@@ -536,7 +536,7 @@ struct LibraryMiniStat: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: color.opacity(0.08), radius: 4, x: 0, y: 2)
         .frame(maxWidth: .infinity)
@@ -632,13 +632,13 @@ struct LibraryActionCard: View {
                 Image(systemName: icon).foregroundColor(color).font(.title2)
             }
             VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.headline).foregroundColor(.primary)
-                Text(subtitle).font(.caption).foregroundColor(.secondary).lineLimit(2)
+                Text(title).font(.headline).foregroundColor(.textPrimary)
+                Text(subtitle).font(.caption).foregroundColor(.textSecondary).lineLimit(2)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
     }
@@ -656,12 +656,12 @@ struct LibraryStatCard: View {
                 Image(systemName: icon).foregroundColor(color).font(.title3)
                 Spacer()
             }
-            Text(value).font(.title2.weight(.bold)).foregroundColor(.primary)
-            Text(title).font(.caption).foregroundColor(.secondary)
+            Text(value).font(.title2.weight(.bold)).foregroundColor(.textPrimary)
+            Text(title).font(.caption).foregroundColor(.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .cornerRadius(16)
     }
 }
@@ -679,13 +679,13 @@ struct ActivityRow: View {
                 Image(systemName: icon).foregroundColor(color).font(.subheadline)
             }
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.medium)).foregroundColor(.primary)
-                Text(subtitle).font(.caption).foregroundColor(.secondary)
+                Text(title).font(.subheadline.weight(.medium)).foregroundColor(.textPrimary)
+                Text(subtitle).font(.caption).foregroundColor(.textSecondary)
             }
             Spacer()
         }
         .padding(12)
-        .background(Color.lightPurpleCard)
+        .background(Color.cardBg)
         .cornerRadius(12)
     }
 }

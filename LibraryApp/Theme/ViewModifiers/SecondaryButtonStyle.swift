@@ -5,7 +5,7 @@ struct SecondaryButtonStyle: ButtonStyle {
         configuration.label
             .font(.subheadline)
             .fontWeight(.semibold)
-            .foregroundColor(.primary)
+            .foregroundColor(.textPrimary)
             .frame(maxWidth: .infinity)
             .frame(height: 52)
             .background(Color.surfaceBg)

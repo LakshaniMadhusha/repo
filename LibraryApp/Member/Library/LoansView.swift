@@ -21,23 +21,22 @@ struct LoansView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 24) {
-                    if loans.isEmpty {
-                        VStack(spacing: 16) {
-                            Image(systemName: "book.closed")
-                                .font(.system(size: 64))
-                                .foregroundColor(.secondary.opacity(0.5))
-                            Text("No Active Loans")
-                                .font(.title3.weight(.bold))
-                            Text("Borrow books from the library to start reading.")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding(.top, 100)
-                    } else {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 24) {
+                if loans.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "book.closed")
+                            .font(.system(size: 64))
+                            .foregroundColor(.secondary.opacity(0.5))
+                        Text("No Active Loans")
+                            .font(.title3.weight(.bold))
+                        Text("Borrow books from the library to start reading.")
+                            .font(.subheadline)
+                            .foregroundColor(.textSecondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 100)
+                } else {
                         // Stats Header
                         VStack(spacing: 16) {
                             HStack(spacing: 20) {
@@ -74,7 +73,7 @@ struct LoansView: View {
                 }
                 .padding(.vertical, 20)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("My Loans")
             .navigationBarTitleDisplayMode(.inline)
             .alert("Return Book", isPresented: $showingReturnConfirmation) {
@@ -101,7 +100,6 @@ struct LoansView: View {
                     Text("Extend loan for \"\(book.title)\" by 14 days?")
                 }
             }
-        }
     }
 
     private func returnBook(_ loan: Loan) {
@@ -136,11 +134,11 @@ struct StatCard: View {
                 .font(.title2.weight(.bold))
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.textSecondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.cardBg)
         .cornerRadius(16)
     }
 }
@@ -169,7 +167,7 @@ struct LoanCardView: View {
                                 .frame(width: 60, height: 80)
                                 .overlay(
                                     Image(systemName: "book")
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.textSecondary)
                                 )
                         }
                     }
@@ -183,7 +181,7 @@ struct LoanCardView: View {
                             .lineLimit(2)
                         Text(book.author)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                         Text(book.genre)
                             .font(.caption)
                             .foregroundColor(.purple)
@@ -201,7 +199,7 @@ struct LoanCardView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Due Date")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.textSecondary)
                     Text(loan.dueAt.formatted(date: .abbreviated, time: .omitted))
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(loan.isOverdue ? .red : .primary)
@@ -249,7 +247,7 @@ struct LoanCardView: View {
             }
         }
         .padding(16)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.cardBg)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
     }

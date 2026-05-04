@@ -7,7 +7,7 @@ struct AppLockView: View {
         VStack(spacing: 14) {
             Image(systemName: "lock.fill")
                 .font(.system(size: 34, weight: .semibold))
-                .foregroundColor(.primary)
+                .foregroundColor(.textPrimary)
 
             Text("App Locked")
                 .font(.title2)

@@ -15,7 +15,7 @@ struct BookCoverCard: View {
         VStack(spacing: 8) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(UIColor.secondarySystemBackground))
+                    .fill(Color.cardBg)
                     .frame(width: width, height: height)
                     .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 4)
                 
@@ -44,12 +44,12 @@ struct BookCoverCard: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(book.title)
                     .font(.caption.weight(.semibold))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.textPrimary)
                     .lineLimit(1)
                 
                 Text(book.author)
                     .font(.caption2)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
                     .lineLimit(1)
             }
             .frame(width: width, alignment: .leading)
@@ -68,7 +68,7 @@ fileprivate struct FallbackCover: View {
             
             Text(book.title)
                 .font(.caption)
-                .foregroundColor(.primary)
+                .foregroundColor(.textPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.horizontal, 8)

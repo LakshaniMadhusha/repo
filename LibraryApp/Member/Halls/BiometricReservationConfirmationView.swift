@@ -46,7 +46,7 @@ struct BiometricReservationConfirmationView: View {
             .buttonStyle(.primaryButton)
 
             Button("Cancel") { dismiss() }
-                .foregroundColor(.primary)
+                .foregroundColor(.textPrimary)
                 .buttonStyle(.plain)
         }
         .padding(20)

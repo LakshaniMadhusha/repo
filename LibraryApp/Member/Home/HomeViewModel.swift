@@ -13,6 +13,8 @@ final class HomeViewModel {
     private(set) var featuredBooks: [Book] = []
     private(set) var activeLoans: [Loan] = []
     private(set) var activeReservations: [Reservation] = []
+    private(set) var upcomingHallReservations: [HallReservation] = []
+    private(set) var upcomingBookReservations: [Reservation] = []
     private(set) var readingStreak: Int = 0
     private(set) var rewardPoints: Int = 0
 
@@ -45,7 +47,7 @@ final class HomeViewModel {
 
             // Schedule due date reminders for active loans
             for loan in activeLoans {
-                NotificationService.shared.scheduleDueDateReminder(for: loan)
+                NotificationService.shared.scheduleDueDateReminder(for: loan, modelContext: modelContext)
             }
 
             // ✅ Approved reservations — same pattern
@@ -59,8 +61,19 @@ final class HomeViewModel {
 
             // Schedule pickup alerts for approved reservations
             for reservation in activeReservations {
-                NotificationService.shared.schedulePickupAlert(for: reservation)
+                NotificationService.shared.schedulePickupAlert(for: reservation, modelContext: modelContext)
             }
+
+            // ✅ Upcoming book reservations
+            upcomingBookReservations = allReservations.filter {
+                ($0.status == .pending || $0.status == .approved) && $0.user?.id == userId
+            }.sorted { $0.createdAt > $1.createdAt }
+
+            // ✅ Upcoming hall reservations
+            let allHallReservations = try modelContext.fetch(FetchDescriptor<HallReservation>())
+            upcomingHallReservations = allHallReservations
+                .filter { $0.userId == userId && $0.status == .confirmed }
+                .sorted { $0.bookingDate < $1.bookingDate }
 
             // ✅ Reading sessions — userId is a flat UUID, safe to predicate
             let sessionDescriptor = FetchDescriptor<ReadingSession>(

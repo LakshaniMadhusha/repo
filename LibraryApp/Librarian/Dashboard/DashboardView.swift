@@ -8,6 +8,7 @@ struct DashboardView: View {
     @State private var showingAnnouncement = false
     @State private var announcementTitle = ""
     @State private var announcementMessage = ""
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         NavigationStack {
@@ -38,7 +39,7 @@ struct DashboardView: View {
                     TextField("Message", text: $announcementMessage)
                         .textFieldStyle(.roundedBorder)
                     Button("Send") {
-                        NotificationService.shared.scheduleLibrarianAnnouncement(title: announcementTitle, message: announcementMessage)
+                        NotificationService.shared.scheduleLibrarianAnnouncement(title: announcementTitle, message: announcementMessage, modelContext: modelContext)
                         showingAnnouncement = false
                         announcementTitle = ""
                         announcementMessage = ""

@@ -54,24 +54,24 @@ struct ReadingTrackerView: View {
                                 VStack(spacing: 12) {
                                     Image(systemName: "books.vertical.fill")
                                         .font(.system(size: 40))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.textSecondary)
                                     Text("No active loans.")
                                         .font(.headline)
                                     Text("Borrow a book to start tracking your reading.")
                                         .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.textSecondary)
                                         .multilineTextAlignment(.center)
                                 }
                                 .padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color(UIColor.secondarySystemBackground))
+                                .background(Color.cardBg)
                                 .cornerRadius(16)
                                 .padding(.horizontal, 20)
                             } else {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("What are you reading?")
                                         .font(.subheadline.weight(.medium))
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.textSecondary)
                                         .padding(.horizontal, 24)
                                     
                                     Picker("Select Book", selection: $selectedBook) {
@@ -83,7 +83,7 @@ struct ReadingTrackerView: View {
                                     .pickerStyle(.menu)
                                     .padding(12)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(Color(UIColor.secondarySystemBackground))
+                                    .background(Color.cardBg)
                                     .cornerRadius(16)
                                     .padding(.horizontal, 20)
                                 }
@@ -94,7 +94,7 @@ struct ReadingTrackerView: View {
                                         HStack {
                                             Text("Reading Target")
                                                 .font(.subheadline.weight(.medium))
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(.textSecondary)
                                             Spacer()
                                             Text("\(Int(targetMinutes)) min")
                                                 .font(.subheadline.weight(.bold))
@@ -132,11 +132,11 @@ struct ReadingTrackerView: View {
                                         let seconds = Int(timeElapsed) % 60
                                         Text("\(minutes):\(String(format: "%02d", seconds))")
                                             .font(.system(size: 64, weight: .bold, design: .rounded))
-                                            .foregroundColor(.primary)
+                                            .foregroundColor(.textPrimary)
                                             .contentTransition(.numericText())
                                         Text("Minutes Read")
                                             .font(.headline)
-                                            .foregroundColor(.secondary)
+                                            .foregroundColor(.textSecondary)
                                     }
                                 }
                                 .frame(width: 280, height: 280)
@@ -216,7 +216,7 @@ struct ReadingTrackerView: View {
                     }
                 }
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Reading Tracker")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -283,7 +283,7 @@ struct ReadingTrackerView: View {
                         
                         Text("\(Int(targetMinutes))m Target")
                             .font(.caption.weight(.semibold))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
@@ -359,7 +359,7 @@ struct ReadingTrackerView: View {
         try? modelContext.save()
         
         // Schedule challenge milestone notification
-        NotificationService.shared.scheduleChallengeMilestone(userId: user.id, milestone: "Read for \(minutes) minutes!")
+        NotificationService.shared.scheduleChallengeMilestone(userId: user.id, milestone: "Read for \(minutes) minutes!", modelContext: modelContext)
         
         triggerSuccess()
     }

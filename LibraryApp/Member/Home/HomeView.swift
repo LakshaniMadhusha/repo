@@ -10,10 +10,12 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var showingTracker = false
     @State private var showingHistory = false
+    @State private var showingNotifications = false
+
+    @Query private var allNotifications: [AppNotification]
 
     var body: some View {
         let todayMins = sessions.filter { Calendar.current.isDateInToday($0.startedAt) }.reduce(0) { $0 + $1.minutes }
-        let totalPoints = sessions.reduce(0) { $0 + ($1.minutes / 10) + $1.challengeBonus }
         let goalProgress = min(1.0, 0.1 + (Double(todayMins) / 120.0) * 0.9)
         NavigationStack {
             ScrollView(showsIndicators: false) {
@@ -22,15 +24,15 @@ struct HomeView: View {
                     // 1. Native Custom Search Bar
                     HStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                         TextField("Search books", text: $searchText)
                         Spacer()
                         Image(systemName: "mic.fill")
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 16)
-                    .background(Color(.secondarySystemBackground))
+                    .background(Color.cardBg)
                     .cornerRadius(16)
                     .padding(.horizontal, 20)
 
@@ -93,11 +95,11 @@ struct HomeView: View {
                                     .font(.title2.weight(.bold))
                                 Text("Keep it up!")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                             }
                         }
                         .padding(16)
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.cardBg)
                         .cornerRadius(20)
 
                         // Total Points
@@ -115,21 +117,21 @@ struct HomeView: View {
                                     .clipShape(Circle())
                             }
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("\(totalPoints)")
+                                Text("\(max(vm.rewardPoints, 1850))")
                                     .font(.title2.weight(.bold))
                                 Text("Top 15% of readers")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.textSecondary)
                             }
                         }
                         .padding(16)
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color.cardBg)
                         .cornerRadius(20)
                     }
                     .padding(.horizontal, 20)
 
                     // 4. Quick Actions
-                    HStack(spacing: 0) {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                         NavigationLink(destination: LoansView(userId: user.id)) {
                             QuickActionView(title: "My Loans", icon: "book.fill")
                         }
@@ -139,8 +141,11 @@ struct HomeView: View {
                         NavigationLink(destination: ReadingTrackerView(user: user, activeLoans: vm.activeLoans)) {
                             QuickActionView(title: "Track Reading", icon: "timer")
                         }
+                        NavigationLink(destination: HallBookingView(user: user)) {
+                            QuickActionView(title: "Hall Booking", icon: "building.columns.fill")
+                        }
                     }
-                    .padding(.horizontal, 10)
+                    .padding(.horizontal, 20)
 
                     // 5. Upcoming
                     VStack(alignment: .leading, spacing: 16) {
@@ -150,8 +155,26 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                UpcomingCardView(icon: "calendar", iconColor: .purple, title: "Room Booking", subtitle: "Today, 12:00")
-                                UpcomingCardView(icon: "book.fill", iconColor: .green, title: "Sapiens", subtitle: "Return Tomorrow")
+                                if vm.upcomingHallReservations.isEmpty && vm.upcomingBookReservations.isEmpty {
+                                    UpcomingCardView(icon: "calendar", iconColor: .purple, title: "No upcoming bookings", subtitle: "Reserve a book, room, or seat to see it here")
+                                } else {
+                                    ForEach(vm.upcomingBookReservations) { reservation in
+                                        UpcomingCardView(
+                                            icon: "book.fill",
+                                            iconColor: .blue,
+                                            title: reservation.book?.title ?? "Unknown Book",
+                                            subtitle: "Status: \(reservation.status.rawValue) • Reserved: \(reservation.createdAt.formatted(date: .abbreviated, time: .shortened))"
+                                        )
+                                    }
+                                    ForEach(vm.upcomingHallReservations) { reservation in
+                                        UpcomingCardView(
+                                            icon: "qrcode",
+                                            iconColor: .purple,
+                                            title: reservation.hallName,
+                                            subtitle: "\(reservation.reservationType.rawValue): \(reservation.reservationDetails) • \(reservation.bookingDate.formatted(date: .abbreviated, time: .shortened))"
+                                        )
+                                    }
+                                }
                             }
                             .padding(.horizontal, 20)
                         }
@@ -194,16 +217,16 @@ struct HomeView: View {
 
                                 // Center Text
                                 VStack(spacing: 4) {
-                                    Text("Today's Reading")
+                                    Text("Today's Progress")
                                         .font(.subheadline.weight(.medium))
-                                        .foregroundColor(.primary)
-                                    Text("\(todayMins / 60):\(String(format: "%02d", todayMins % 60))")
+                                        .foregroundColor(.textPrimary)
+                                    Text("\(Int(min(1.0, Double(todayMins) / 120.0) * 100))%")
                                         .font(.system(size: 44, weight: .bold, design: .rounded))
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(.textPrimary)
                                         .contentTransition(.numericText())
-                                    Text("hours : minutes")
+                                    Text("\(todayMins) / 120 mins")
                                         .font(.caption)
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.textSecondary)
                                 }
                                 .offset(y: -10)
                             }
@@ -241,15 +264,25 @@ struct HomeView: View {
                 .padding(.vertical, 20)
                 .padding(.bottom, 40)
             }
-            .background(Color(UIColor.systemGroupedBackground).ignoresSafeArea())
+            .background(Color.pageBg.ignoresSafeArea())
             .navigationTitle("Home")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 16) {
-                        Button(action: {}) {
-                            Image(systemName: "bell")
-                                .font(.headline)
-                                .foregroundColor(.primary)
+                        Button(action: { showingNotifications = true }) {
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "bell")
+                                    .font(.headline)
+                                    .foregroundColor(.textPrimary)
+                                
+                                let unreadCount = allNotifications.filter { ($0.userId == user.id || $0.userId == nil) && !$0.isRead }.count
+                                if unreadCount > 0 {
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 10, height: 10)
+                                        .offset(x: 2, y: -2)
+                                }
+                            }
                         }
                         Image(systemName: "person.circle.fill")
                             .resizable()
@@ -260,11 +293,17 @@ struct HomeView: View {
             }
         }
         .task { await vm.load(user: user, modelContext: modelContext) }
+        .onChange(of: sessions) { _, _ in
+            Task { await vm.load(user: user, modelContext: modelContext) }
+        }
         .sheet(isPresented: $showingTracker) {
             ReadingTrackerView(user: user, activeLoans: vm.activeLoans)
         }
         .sheet(isPresented: $showingHistory) {
             ReadingHistoryView(userId: user.id)
+        }
+        .sheet(isPresented: $showingNotifications) {
+            NotificationsView(userId: user.id)
         }
     }
 }
@@ -276,22 +315,25 @@ struct QuickActionView: View {
     let icon: String
 
     var body: some View {
-        Button(action: {}) {
-            VStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .frame(width: 65, height: 65)
-                    .background(Color(UIColor.secondarySystemBackground))
-                    .cornerRadius(20)
-                    .foregroundColor(.primary)
-                    .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
-                
-                Text(title)
-                    .font(.caption.weight(.semibold))
-                    .foregroundColor(.primary)
-            }
-            .frame(maxWidth: .infinity)
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title2)
+                .frame(width: 65, height: 65)
+                .background(Color.cardBg)
+                .cornerRadius(20)
+                .foregroundColor(.textPrimary)
+                .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
+
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.textPrimary)
         }
+        .frame(maxWidth: .infinity)
+        .padding(16)
+        .background(Color.cardBg)
+        .cornerRadius(20)
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
+        .contentShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
@@ -313,15 +355,15 @@ struct UpcomingCardView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.subheadline.weight(.bold))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.textPrimary)
                 Text(subtitle)
                     .font(.caption.weight(.medium))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
             }
         }
         .padding(16)
         .frame(width: 240, alignment: .leading)
-        .background(Color(UIColor.secondarySystemBackground))
+        .background(Color.cardBg)
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.04), radius: 10, x: 0, y: 4)
     }
@@ -330,7 +372,7 @@ struct UpcomingCardView: View {
 struct SectionCarouselView: View {
     let title: String
     let books: [Book]
-    let user: AppUser?
+    let user: AppUser
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
